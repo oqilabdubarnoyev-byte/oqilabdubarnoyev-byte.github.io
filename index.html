@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="uz-Cyrl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MAYDON — Футбол янгиликлари, натижалар ва таҳлиллар</title>
+<meta name="description" content="Ҳар куни Ўзбекистон ва дунё футболи ҳақида асосий янгиликлар, натижалар, таҳлил ва мусобақа жадваллари.">
+<meta property="og:title" content="MAYDON — Футбол янгиликлари">
+<meta property="og:description" content="Ўзбекистон ва дунё футболи: янгиликлар, натижалар, таҳлил.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --bg:#0B1020;
+  --bg-2:#121A31;
+  --bg-3:#0E1527;
+  --bg-4:#18213C;
+  --line:rgba(255,255,255,.075);
+  --line-2:rgba(255,255,255,.15);
+  --cobalt:#3D7BFF;
+  --cobalt-2:#6A9BFF;
+  --saffron:#F5A623;
+  --live:#FF4141;
+  --win:#33D69F;
+  --text:#EEF2FA;
+  --dim:#8E9BB5;
+  --dim-2:#63708A;
+  --r:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+.wrap{max-width:1260px;margin:0 auto;padding:0 20px}
+.osw{font-family:'Oswald',sans-serif}
+:focus-visible{outline:2px solid var(--cobalt);outline-offset:3px;border-radius:4px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ============ HEADER ============ */
+header{position:sticky;top:0;z-index:60;background:rgba(11,16,32,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.topbar{display:flex;align-items:center;justify-content:space-between;height:62px;gap:18px}
+.brand{display:flex;align-items:center;gap:10px;flex:none}
+.brand svg{width:32px;height:32px}
+.brand-tx{font-family:'Oswald',sans-serif;font-weight:700;font-size:23px;letter-spacing:.05em}
+.brand-tx b{color:var(--cobalt)}
+.mainnav{display:flex;gap:24px;flex:1}
+.mainnav a{font-family:'Oswald',sans-serif;font-weight:500;text-transform:uppercase;letter-spacing:.07em;font-size:13.5px;color:var(--dim);padding:4px 0;position:relative;transition:color .18s}
+.mainnav a:hover{color:var(--text)}
+.mainnav a.on{color:var(--text)}
+.mainnav a.on::after{content:"";position:absolute;left:0;right:0;bottom:-21px;height:2px;background:var(--cobalt)}
+.tools{display:flex;align-items:center;gap:10px;flex:none}
+.searchbox{display:flex;align-items:center;gap:7px;background:var(--bg-2);border:1px solid var(--line);border-radius:8px;padding:7px 11px;transition:border-color .18s}
+.searchbox:focus-within{border-color:var(--cobalt)}
+.searchbox svg{width:15px;height:15px;stroke:var(--dim-2);fill:none;stroke-width:2}
+.searchbox input{background:none;border:none;outline:none;color:var(--text);font-size:13px;width:130px}
+.searchbox input::placeholder{color:var(--dim-2)}
+.langsw{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.langsw button{padding:7px 11px;font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.06em;color:var(--dim);transition:.18s}
+.langsw button.on{background:var(--cobalt);color:#04101f;font-weight:600}
+.burger{display:none;flex-direction:column;gap:5px;padding:7px}
+.burger span{width:22px;height:2px;background:var(--text);border-radius:2px}
+
+/* ============ MATCH STRIP ============ */
+.strip{background:var(--bg-3);border-bottom:1px solid var(--line);position:relative}
+.strip-inner{display:flex;align-items:stretch;overflow-x:auto;scrollbar-width:none}
+.strip-inner::-webkit-scrollbar{display:none}
+.strip-lbl{flex:none;display:flex;align-items:center;gap:8px;padding:0 16px;background:var(--bg-4);border-right:1px solid var(--line);font-family:'Oswald',sans-serif;font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);position:sticky;left:0;z-index:2}
+.mtile{flex:none;min-width:172px;padding:10px 16px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:5px;transition:background .18s}
+.mtile:hover{background:var(--bg-2)}
+.mtile .comp{font-size:10.5px;color:var(--dim-2);font-family:'Oswald',sans-serif;letter-spacing:.09em;text-transform:uppercase}
+.mrow{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px}
+.mrow .tm{color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mrow .sc{font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;flex:none}
+.mrow.w .tm{color:var(--text);font-weight:600}
+.mrow.w .sc{color:var(--saffron)}
+.mstat{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.1em;color:var(--dim-2)}
+.mstat.live{color:var(--live);display:flex;align-items:center;gap:5px}
+.mstat.live::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--live);animation:blip 1.3s infinite}
+@keyframes blip{0%,100%{opacity:1}50%{opacity:.25}}
+
+/* ============ SECTION SHELL ============ */
+.sec{padding:38px 0}
+.sec-hd{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:20px;flex-wrap:wrap}
+.sec-ttl{font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;font-size:21px;letter-spacing:.04em;display:flex;align-items:center;gap:11px}
+.sec-ttl::before{content:"";width:4px;height:21px;background:var(--cobalt);border-radius:2px}
+.sec-more{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:12.5px;color:var(--dim);transition:color .18s}
+.sec-more:hover{color:var(--cobalt)}
+
+/* ============ EDITOR PICKS (hero) ============ */
+.picks{display:grid;grid-template-columns:1.55fr 1fr;gap:18px}
+.lead{position:relative;border-radius:var(--r);overflow:hidden;min-height:400px;display:flex;align-items:flex-end;background:linear-gradient(155deg,#1B3A6B,#0F1E3A);cursor:pointer;border:1px solid var(--line)}
+.lead::before{content:"";position:absolute;inset:0;background:
+  repeating-linear-gradient(90deg,transparent 0 58px,rgba(255,255,255,.028) 58px 59px),
+  radial-gradient(420px 260px at 78% 12%,rgba(61,123,255,.28),transparent 70%)}
+.lead::after{content:"";position:absolute;left:0;right:0;bottom:0;height:72%;background:linear-gradient(to top,rgba(8,12,24,.95),transparent)}
+.lead-body{position:relative;z-index:2;padding:28px 30px 30px;width:100%}
+.pill{display:inline-flex;align-items:center;gap:7px;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.13em;text-transform:uppercase;background:var(--saffron);color:#1a1204;padding:5px 10px;border-radius:5px;font-weight:600;margin-bottom:14px}
+.lead h1{font-family:'Oswald',sans-serif;font-weight:600;font-size:clamp(24px,2.9vw,36px);line-height:1.12;letter-spacing:.005em;margin-bottom:12px}
+.lead p{color:#BEC9DC;font-size:15px;max-width:600px;margin-bottom:16px}
+.meta{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--dim)}
+.meta .cm{display:inline-flex;align-items:center;gap:5px;color:var(--dim-2)}
+.meta .cm svg{width:13px;height:13px;fill:currentColor}
+.dot{width:3px;height:3px;border-radius:50%;background:var(--dim-2);flex:none}
+
+.picks-side{display:flex;flex-direction:column;gap:12px}
+.pk{display:grid;grid-template-columns:96px 1fr;gap:13px;background:var(--bg-2);border:1px solid var(--line);border-radius:10px;padding:11px;cursor:pointer;transition:border-color .18s,transform .18s}
+.pk:hover{border-color:var(--line-2);transform:translateX(3px)}
+.pk-th{border-radius:7px;height:70px;display:flex;align-items:center;justify-content:center;font-size:27px}
+.th-a{background:linear-gradient(145deg,#1F4E3C,#123025)}
+.th-b{background:linear-gradient(145deg,#4A3418,#2C1F0E)}
+.th-c{background:linear-gradient(145deg,#2C2B5E,#181738)}
+.th-d{background:linear-gradient(145deg,#5A2430,#33141B)}
+.th-e{background:linear-gradient(145deg,#1B3A6B,#122443)}
+.pk-tx{display:flex;flex-direction:column;justify-content:center;gap:6px}
+.pk-tx h4{font-size:14px;font-weight:600;line-height:1.3}
+.pk-tx .meta{font-size:11.5px}
+
+/* ============ MAIN + SIDEBAR ============ */
+.layout{display:grid;grid-template-columns:1fr 336px;gap:26px;align-items:start}
+
+.hotgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.card{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;cursor:pointer;transition:transform .18s,border-color .18s}
+.card:hover{transform:translateY(-3px);border-color:var(--line-2)}
+.card-th{height:158px;position:relative;display:flex;align-items:center;justify-content:center;font-size:46px}
+.card-cat{position:absolute;left:11px;top:11px;font-family:'Oswald',sans-serif;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;background:rgba(8,12,24,.78);border:1px solid var(--line-2);padding:4px 9px;border-radius:5px;color:var(--cobalt-2)}
+.card-bd{padding:14px 15px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.card-bd h3{font-size:16px;font-weight:600;line-height:1.3}
+.card-bd p{font-size:13px;color:var(--dim);flex:1}
+
+/* sidebar */
+.side{display:flex;flex-direction:column;gap:18px;position:sticky;top:78px}
+.panel{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.panel-hd{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;background:var(--bg-3);border-bottom:1px solid var(--line)}
+.panel-hd h3{font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;font-size:14px;letter-spacing:.06em}
+.panel-hd a{font-family:'Oswald',sans-serif;font-size:11.5px;letter-spacing:.07em;color:var(--dim-2);text-transform:uppercase}
+.panel-hd a:hover{color:var(--cobalt)}
+
+.feed{max-height:430px;overflow-y:auto}
+.feed::-webkit-scrollbar{width:5px}
+.feed::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:3px}
+.fitem{display:grid;grid-template-columns:44px 1fr;gap:11px;padding:11px 15px;border-bottom:1px solid var(--line);cursor:pointer;transition:background .16s}
+.fitem:hover{background:var(--bg-4)}
+.fitem:last-child{border-bottom:none}
+.ftime{font-family:'Oswald',sans-serif;font-size:12px;color:var(--saffron);padding-top:1px}
+.fitem p{font-size:13px;line-height:1.4}
+.fitem .cm{font-size:11px;color:var(--dim-2);margin-top:4px;display:flex;align-items:center;gap:5px}
+.fitem .cm svg{width:12px;height:12px;fill:currentColor}
+
+/* standings */
+table{width:100%;border-collapse:collapse}
+thead th{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.07em;font-size:10.5px;color:var(--dim-2);text-align:left;padding:10px 14px;border-bottom:1px solid var(--line)}
+thead th.c{text-align:center;padding:10px 6px}
+tbody td{padding:9px 14px;border-bottom:1px solid var(--line);font-size:13.5px}
+tbody td.c{text-align:center;padding:9px 6px;font-family:'Oswald',sans-serif;color:var(--dim)}
+tbody tr:last-child td{border-bottom:none}
+td.ps{font-family:'Oswald',sans-serif;font-weight:600;color:var(--dim-2);width:26px}
+td.cl{font-weight:600}
+td.pt{font-family:'Oswald',sans-serif;font-weight:700;text-align:center;padding:9px 12px}
+tr.acl td.ps{color:var(--win)}
+tr.acl{background:rgba(51,214,159,.05)}
+.panel-note{padding:11px 15px;font-size:11.5px;color:var(--dim-2);background:var(--bg-3);border-top:1px solid var(--line);line-height:1.45}
+
+/* scorers */
+.scorer{display:flex;align-items:center;gap:11px;padding:10px 15px;border-bottom:1px solid var(--line)}
+.scorer:last-of-type{border-bottom:none}
+.sc-n{font-family:'Oswald',sans-serif;font-weight:600;color:var(--dim-2);width:16px;font-size:13px}
+.sc-i{flex:1}
+.sc-i b{display:block;font-size:13.5px;font-weight:600}
+.sc-i span{font-size:11.5px;color:var(--dim-2)}
+.sc-g{font-family:'Oswald',sans-serif;font-weight:700;font-size:16px;color:var(--saffron)}
+
+/* ============ MEDIA TABS ============ */
+.tabs{display:flex;gap:8px;margin-bottom:18px}
+.tab{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.07em;font-size:13px;padding:8px 16px;border:1px solid var(--line);border-radius:8px;color:var(--dim);transition:.18s}
+.tab.on{background:var(--cobalt);border-color:var(--cobalt);color:#04101f;font-weight:600}
+.tabpane{display:none;grid-template-columns:repeat(4,1fr);gap:14px}
+.tabpane.on{display:grid}
+.mcard{border-radius:10px;overflow:hidden;border:1px solid var(--line);cursor:pointer;transition:transform .18s,border-color .18s;background:var(--bg-2)}
+.mcard:hover{transform:translateY(-3px);border-color:var(--line-2)}
+.mcard-th{height:118px;display:flex;align-items:center;justify-content:center;position:relative;font-size:32px}
+.playic{position:absolute;width:38px;height:38px;border-radius:50%;background:rgba(11,16,32,.75);border:1px solid var(--line-2);display:flex;align-items:center;justify-content:center}
+.playic svg{width:14px;height:14px;fill:var(--text);margin-left:2px}
+.mcard p{padding:11px 12px 13px;font-size:13px;font-weight:500;line-height:1.35}
+
+/* ============ SOCIAL ============ */
+.social{background:linear-gradient(180deg,var(--bg-3),var(--bg));border-top:1px solid var(--line);padding:46px 0}
+.soc-hd{text-align:center;max-width:580px;margin:0 auto 28px}
+.soc-hd h2{font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;font-size:clamp(22px,3vw,31px);letter-spacing:.03em;margin-bottom:10px}
+.soc-hd h2 span{color:var(--cobalt)}
+.soc-hd p{color:var(--dim);font-size:14.5px}
+.socgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:13px}
+.soc{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r);padding:20px 14px;display:flex;flex-direction:column;align-items:center;gap:9px;text-align:center;transition:transform .18s,border-color .18s,background .18s}
+.soc:hover{transform:translateY(-4px);border-color:var(--line-2);background:var(--bg-4)}
+.soc-ic{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center}
+.soc-ic svg{width:22px;height:22px;fill:#fff}
+.soc b{font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.05em;font-size:13.5px}
+.soc span{font-size:11.5px;color:var(--dim-2)}
+.soc em{font-size:11.5px;color:var(--cobalt-2);font-style:normal;font-weight:500}
+.i-tg{background:#229ED9}
+.i-ig{background:linear-gradient(45deg,#F58529,#DD2A7B,#8134AF)}
+.i-yt{background:#FF0000}
+.i-fb{background:#1877F2}
+.i-x{background:#000;border:1px solid var(--line-2)}
+
+/* ============ FOOTER ============ */
+footer{background:var(--bg-3);border-top:1px solid var(--line);padding:30px 0}
+.ft{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+.ft-b{font-family:'Oswald',sans-serif;font-weight:700;font-size:19px;letter-spacing:.05em}
+.ft-b b{color:var(--cobalt)}
+.ft p{font-size:12.5px;color:var(--dim-2);margin-top:3px}
+.ft-l{display:flex;gap:18px;flex-wrap:wrap}
+.ft-l a{font-size:12.5px;color:var(--dim);transition:color .18s}
+.ft-l a:hover{color:var(--cobalt)}
+.age{border:1px solid var(--line-2);border-radius:5px;padding:3px 7px;font-family:'Oswald',sans-serif;font-size:11px;color:var(--dim-2)}
+
+/* ============ ARTICLE MODAL ============ */
+.ov{position:fixed;inset:0;z-index:100;background:rgba(5,8,18,.78);backdrop-filter:blur(7px);display:none;overflow-y:auto;padding:34px 18px}
+.ov.on{display:block}
+.art{max-width:740px;margin:0 auto;background:var(--bg-2);border:1px solid var(--line-2);border-radius:var(--r);padding:34px 38px 40px;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.xbtn{position:absolute;right:16px;top:16px;width:34px;height:34px;border-radius:9px;border:1px solid var(--line-2);background:var(--bg-3);font-size:19px;line-height:1;display:flex;align-items:center;justify-content:center;transition:background .18s}
+.xbtn:hover{background:var(--bg-4)}
+.art .pill{background:var(--cobalt);color:#04101f}
+.art h2{font-family:'Oswald',sans-serif;font-weight:600;font-size:clamp(22px,3.1vw,31px);line-height:1.14;margin-bottom:14px}
+.art-meta{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--dim);border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:20px;flex-wrap:wrap}
+.art-meta .who{color:var(--text);font-weight:600}
+.art p{font-size:15.5px;color:#CFD8E8;margin-bottom:15px}
+.art p b{color:var(--text)}
+.art h3{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.03em;font-size:17px;margin:24px 0 11px;color:var(--cobalt-2)}
+.quote{border-left:3px solid var(--saffron);padding:4px 0 4px 16px;margin:18px 0;font-size:16px;color:var(--text);font-style:italic}
+.srcs{margin-top:26px;padding-top:18px;border-top:1px solid var(--line)}
+.srcs h4{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.08em;font-size:12px;color:var(--dim-2);margin-bottom:10px}
+.srcs a{display:block;font-size:12.5px;color:var(--cobalt-2);margin-bottom:5px;word-break:break-word}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:1080px){
+  .layout{grid-template-columns:1fr}
+  .side{position:static}
+  .tabpane.on{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:880px){
+  .mainnav,.searchbox{display:none}
+  .burger{display:flex}
+  .mainnav.open{display:flex;flex-direction:column;position:absolute;top:62px;left:0;right:0;background:var(--bg-2);border-bottom:1px solid var(--line);padding:16px 20px;gap:14px;z-index:70}
+  .mainnav.open a.on::after{display:none}
+  .picks{grid-template-columns:1fr}
+  .lead{min-height:320px}
+  .tabpane.on{grid-template-columns:repeat(2,1fr)}
+  .socgrid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:600px){
+  .hotgrid{grid-template-columns:1fr}
+  .socgrid{grid-template-columns:repeat(2,1fr)}
+  .art{padding:28px 20px 32px}
+  .lead-body{padding:20px 18px 22px}
+  .ft{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <div class="wrap topbar">
+    <a class="brand" href="#">
+      <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+        <path d="M6 14 L14 8 L18 16 L24 12 L30 16 L34 8 L42 14 L38 30 Q24 44 10 30 Z" fill="#3D7BFF" opacity=".16"/>
+        <path d="M6 14 L14 8 L18 16 L24 12 L30 16 L34 8 L42 14 L38 30 Q24 44 10 30 Z" stroke="#3D7BFF" stroke-width="2" stroke-linejoin="round"/>
+        <circle cx="18" cy="23" r="2.3" fill="#3D7BFF"/><circle cx="30" cy="23" r="2.3" fill="#3D7BFF"/>
+        <path d="M21.5 30 L24 33 L26.5 30" stroke="#F5A623" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="brand-tx">MAY<b>DON</b></span>
+    </a>
+
+    <nav class="mainnav" id="nav">
+      <a href="#" class="on">Бош саҳифа</a>
+      <a href="#hot">Янгиликлар</a>
+      <a href="#jadval">Суперлига</a>
+      <a href="#hot">Терма жамоа</a>
+      <a href="#media">Видео</a>
+      <a href="#media">Фото</a>
+    </nav>
+
+    <div class="tools">
+      <label class="searchbox">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input type="search" placeholder="Қидириш…" aria-label="Сайт бўйлаб қидириш">
+      </label>
+      <div class="langsw">
+        <button class="on">Кир</button>
+        <button>Lat</button>
+      </div>
+      <div class="burger" id="burger" role="button" tabindex="0" aria-label="Меню"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== TODAY'S MATCHES STRIP ===== -->
+<div class="strip">
+  <div class="strip-inner">
+    <div class="strip-lbl">Бугунги ўйинлар</div>
+
+    <a class="mtile" href="#">
+      <span class="comp">Суперлига</span>
+      <div class="mrow"><span class="tm">Нефтчи</span><span class="sc">0</span></div>
+      <div class="mrow"><span class="tm">Сўғдиёна</span><span class="sc">0</span></div>
+      <span class="mstat live">1-бўлим</span>
+    </a>
+
+    <a class="mtile" href="#">
+      <span class="comp">АПЛ</span>
+      <div class="mrow"><span class="tm">Ман Сити</span><span class="sc">0</span></div>
+      <div class="mrow w"><span class="tm">Борнмут</span><span class="sc">1</span></div>
+      <span class="mstat live">Танаффус</span>
+    </a>
+
+    <a class="mtile" href="#">
+      <span class="comp">АПЛ</span>
+      <div class="mrow w"><span class="tm">Брайтон</span><span class="sc">2</span></div>
+      <div class="mrow"><span class="tm">Астон Вилла</span><span class="sc">0</span></div>
+      <span class="mstat live">2-бўлим</span>
+    </a>
+
+    <a class="mtile" href="#">
+      <span class="comp">Ла Лига</span>
+      <div class="mrow"><span class="tm">Атлетико</span><span class="sc">—</span></div>
+      <div class="mrow"><span class="tm">Вильярреал</span><span class="sc">—</span></div>
+      <span class="mstat">20:00</span>
+    </a>
+
+    <a class="mtile" href="#">
+      <span class="comp">АПЛ</span>
+      <div class="mrow"><span class="tm">Ньюкасл</span><span class="sc">—</span></div>
+      <div class="mrow"><span class="tm">Ливерпуль</span><span class="sc">—</span></div>
+      <span class="mstat">20:30</span>
+    </a>
+
+    <a class="mtile" href="#">
+      <span class="comp">Лига 1</span>
+      <div class="mrow"><span class="tm">Ренн</span><span class="sc">—</span></div>
+      <div class="mrow"><span class="tm">ПСЖ</span><span class="sc">—</span></div>
+      <span class="mstat">23:45</span>
+    </a>
+
+    <a class="mtile" href="#">
+      <span class="comp">Ла Лига</span>
+      <div class="mrow"><span class="tm">Эльче</span><span class="sc">—</span></div>
+      <div class="mrow"><span class="tm">Барселона</span><span class="sc">—</span></div>
+      <span class="mstat">00:30</span>
+    </a>
+  </div>
+</div>
+
+<!-- ===== EDITOR PICKS ===== -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-hd">
+      <div class="sec-ttl">Таҳририят танлови</div>
+      <a class="sec-more" href="#hot">Барча янгиликлар ›</a>
+    </div>
+
+    <div class="picks">
+      <article class="lead" onclick="openArt()" tabindex="0" onkeypress="if(event.key==='Enter')openArt()">
+        <div class="lead-body">
+          <span class="pill">Таҳлил · Суперлига</span>
+          <h1>Ҳакамлар кузни кутмади: Суперлигада бир ҳафтада учта қарор, учта жазо</h1>
+          <p>"Пахтакор" — "Сурхон" ўйинидаги ҳисобланмаган гол, ВАР ҳакамининг мавсум охиригача четлатилиши ва ЎзФҲМнинг кечиккан баёноти. Чемпионатда ҳакамлик масаласи яна биринчи ўринга чиқди.</p>
+          <div class="meta">
+            <span>Таҳририят</span><span class="dot"></span>
+            <span>бугун, 10:20</span><span class="dot"></span>
+            <span class="cm"><svg viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>42</span>
+          </div>
+        </div>
+      </article>
+
+      <div class="picks-side">
+        <article class="pk" onclick="openArt()">
+          <div class="pk-th th-a">⚽</div>
+          <div class="pk-tx">
+            <h4>Суперлига. Наманганда "Навбаҳор" "Насаф"ни мағлуб этди ва 3-ўринга кўтарилди</h4>
+            <div class="meta"><span>21 авг, 20:55</span><span class="dot"></span><span class="cm">64</span></div>
+          </div>
+        </article>
+
+        <article class="pk" onclick="openArt()">
+          <div class="pk-th th-d">⚖️</div>
+          <div class="pk-tx">
+            <h4>Расман: ЎзФҲМ Равшан Абдувоҳидовни жиддий жазолади</h4>
+            <div class="meta"><span>кеча, 19:18</span><span class="dot"></span><span class="cm">20</span></div>
+          </div>
+        </article>
+
+        <article class="pk" onclick="openArt()">
+          <div class="pk-th th-b">📋</div>
+          <div class="pk-tx">
+            <h4>Расмий хабар: "Пахтакор" раиси ўринбосари Дилшод Каримов истеъфога чиқди</h4>
+            <div class="meta"><span>кеча, 17:43</span><span class="dot"></span><span class="cm">10</span></div>
+          </div>
+        </article>
+
+        <article class="pk" onclick="openArt()">
+          <div class="pk-th th-c">🎙️</div>
+          <div class="pk-tx">
+            <h4>Тимур Кападзе: "Бугун ютмасак бўлмасди"</h4>
+            <div class="meta"><span>кеча, 03:01</span><span class="dot"></span><span class="cm">10</span></div>
+          </div>
+        </article>
+
+        <article class="pk" onclick="openArt()">
+          <div class="pk-th th-e">🏆</div>
+          <div class="pk-tx">
+            <h4>Эшитдик-да: Суперкубок учрашувига жаҳон футболи афсоналари ташриф буюради</h4>
+            <div class="meta"><span>19 авг, 16:00</span><span class="dot"></span><span class="cm">13</span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOT NEWS + SIDEBAR ===== -->
+<section class="sec" id="hot" style="padding-top:8px">
+  <div class="wrap layout">
+
+    <div>
+      <div class="sec-hd">
+        <div class="sec-ttl">Қайноқ янгиликлар</div>
+        <a class="sec-more" href="#">Барчаси ›</a>
+      </div>
+
+      <div class="hotgrid">
+        <article class="card" onclick="openArt()">
+          <div class="card-th th-a"><span class="card-cat">Суперлига</span>🔥</div>
+          <div class="card-bd">
+            <h3>Суперлига. Бугун янги турга старт берилади</h3>
+            <p>Чемпионатнинг навбатдаги тури бошланмоқда. Кун давомида уч учрашув ўтказилади.</p>
+            <div class="meta"><span>бугун, 09:05</span><span class="dot"></span><span class="cm">20</span></div>
+          </div>
+        </article>
+
+        <article class="card" onclick="openArt()">
+          <div class="card-th th-d"><span class="card-cat">Ҳакамлик</span>⚖️</div>
+          <div class="card-bd">
+            <h3>"Пахтакор" — "Сурхон" учрашувида ВАРда ишлаган ҳакам мавсум охирига қадар четлатилди</h3>
+            <p>Ҳисобланмаган гол юзасидан юзага келган баҳсдан сўнг интизомий чора қўлланилди.</p>
+            <div class="meta"><span>кеча, 11:16</span><span class="dot"></span><span class="cm">30</span></div>
+          </div>
+        </article>
+
+        <article class="card" onclick="openArt()">
+          <div class="card-th th-b"><span class="card-cat">Шарҳ</span>📰</div>
+          <div class="card-bd">
+            <h3>"Футбол олами": Ҳакамлар кузни ҳам кутмасдан "қовун туширишни" бошладилар</h3>
+            <p>Таҳририят шарҳи: мавсум ўртасида ҳакамлик хатолари нега кўпайиб кетди?</p>
+            <div class="meta"><span>кеча, 20:30</span><span class="dot"></span><span class="cm">10</span></div>
+          </div>
+        </article>
+
+        <article class="card" onclick="openArt()">
+          <div class="card-th th-c"><span class="card-cat">Интервью</span>🎤</div>
+          <div class="card-bd">
+            <h3>Беҳруз Каримов: "Отам менга пулни эмас, карьерани танлашим кераклигини айтди"</h3>
+            <p>"Лугано"га ўтиш, Жаҳон чемпионати ва оила ҳақида — катта суҳбат.</p>
+            <div class="meta"><span>20 авг, 17:35</span><span class="dot"></span><span class="cm">28</span></div>
+          </div>
+        </article>
+
+        <article class="card" onclick="openArt()">
+          <div class="card-th th-e"><span class="card-cat">Суперлига</span>⚽</div>
+          <div class="card-bd">
+            <h3>Суперлига. "Нефтчи" Бухорода тиз чўктирилди</h3>
+            <p>Пешқадам жамоа сафардаги учрашувда кутилмаган мағлубиятга учради.</p>
+            <div class="meta"><span>18 авг, 21:55</span><span class="dot"></span><span class="cm">89</span></div>
+          </div>
+        </article>
+
+        <article class="card" onclick="openArt()">
+          <div class="card-th th-b"><span class="card-cat">Дунё футболи</span>💰</div>
+          <div class="card-bd">
+            <h3>2026/27 мавсумда дунёнинг энг қиммат 10 та футбол клуби номи маълум қилинди</h3>
+            <p>Клубларнинг бозор қиймати бўйича янгиланган рейтинг эълон қилинди.</p>
+            <div class="meta"><span>19 авг, 08:55</span><span class="dot"></span><span class="cm">11</span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="side">
+
+      <div class="panel">
+        <div class="panel-hd"><h3>Сўнгги янгиликлар</h3><a href="#">Барча ›</a></div>
+        <div class="feed">
+          <div class="fitem" onclick="openArt()">
+            <span class="ftime">19:05</span>
+            <div><p>"Атлетико" — "Вильярреал". Таркиблар маълум</p></div>
+          </div>
+          <div class="fitem" onclick="openArt()">
+            <span class="ftime">19:02</span>
+            <div><p>Ҳожимирзаев ва Абдухолиқов умумий машғулотларга қайтди</p></div>
+          </div>
+          <div class="fitem" onclick="openArt()">
+            <span class="ftime">18:57</span>
+            <div><p>🔴 Суперлига. "Нефтчи" — "Сўғдиёна" (матнли трансляция)</p>
+            <div class="cm"><svg viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>1</div></div>
+          </div>
+          <div class="fitem" onclick="openArt()">
+            <span class="ftime">18:21</span>
+            <div><p>Мартинелли "Ал Ҳилол"га ўтишга тайёр, "Арсенал" 60 млн евро талаб қилмоқда</p></div>
+          </div>
+          <div class="fitem" onclick="openArt()">
+            <span class="ftime">17:53</span>
+            <div><p>АПЛ. "Манчестер Сити" — "Борнмут" (матнли трансляция)</p>
+            <div class="cm"><svg viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>5</div></div>
+          </div>
+          <div class="fitem" onclick="openArt()">
+            <span class="ftime">17:03</span>
+            <div><p>"Ман Сити" 100 миллион евролик трансферни амалга оширмоқда</p>
+            <div class="cm"><svg viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>3</div></div>
+          </div>
+          <div class="fitem" onclick="openArt()">
+            <span class="ftime">16:32</span>
+            <div><p>Мареска: "Манчестер Сити" янги Родрини топишга ҳаракат қилади"</p></div>
+          </div>
+          <div class="fitem" onclick="openArt()">
+            <span class="ftime">15:55</span>
+            <div><p>Пролигада 16-турнинг энг яхшилари аниқланди</p></div>
+          </div>
+          <div class="fitem" onclick="openArt()">
+            <span class="ftime">15:18</span>
+            <div><p>Ҳамза Абдулкарим "Барселона"дан яхшиланган шартнома олади</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" id="jadval">
+        <div class="panel-hd"><h3>Суперлига жадвали</h3><a href="#">Тўлиқ ›</a></div>
+        <table>
+          <thead><tr><th>#</th><th>Жамоа</th><th class="c">Ў</th><th class="c">Оч</th></tr></thead>
+          <tbody>
+            <tr class="acl"><td class="ps">1</td><td class="cl">Нефтчи</td><td class="c">16</td><td class="pt">39</td></tr>
+            <tr class="acl"><td class="ps">2</td><td class="cl">Пахтакор</td><td class="c">16</td><td class="pt">35</td></tr>
+            <tr><td class="ps">3</td><td class="cl">Бухоро</td><td class="c">16</td><td class="pt">27</td></tr>
+            <tr><td class="ps">…</td><td class="cl" style="color:var(--dim-2);font-weight:400">Навбаҳор 21 авг куни 3-ўринга кўтарилди</td><td class="c">—</td><td class="pt">—</td></tr>
+            <tr><td class="ps">14</td><td class="cl">Қизилқум</td><td class="c">16</td><td class="pt">17</td></tr>
+          </tbody>
+        </table>
+        <div class="panel-note">16-тур ҳолатига кўра (08.08.2026). Жадвал автоматик янгиланиши учун расмий манба — <b>pfl.uz</b> маълумотлари билан улаш керак.</div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-hd"><h3>Тўп урарлар</h3><a href="#">Барча ›</a></div>
+        <div class="scorer"><span class="sc-n">1</span><div class="sc-i"><b>Алишер Одилов</b><span>Нефтчи</span></div><span class="sc-g">—</span></div>
+        <div class="scorer"><span class="sc-n">2</span><div class="sc-i"><b>Жамшид Искандеров</b><span>Нефтчи</span></div><span class="sc-g">—</span></div>
+        <div class="scorer"><span class="sc-n">3</span><div class="sc-i"><b>Стипе Перица</b><span>Нефтчи</span></div><span class="sc-g">—</span></div>
+        <div class="panel-note">Гол сонлари расмий манба уланганда автоматик тўлдирилади.</div>
+      </div>
+
+    </aside>
+  </div>
+</section>
+
+<!-- ===== MEDIA ===== -->
+<section class="sec" id="media" style="border-top:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-hd">
+      <div class="tabs">
+        <button class="tab on" data-t="v">Кун видеоси</button>
+        <button class="tab" data-t="p">Кун фотоси</button>
+      </div>
+      <a class="sec-more" href="#">Барчаси ›</a>
+    </div>
+
+    <div class="tabpane on" id="pane-v">
+      <article class="mcard"><div class="mcard-th th-e">⚽<span class="playic"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div><p>Суперлига. "Пахтакор" – "Сурхон" 0:0</p></article>
+      <article class="mcard"><div class="mcard-th th-a">⚽<span class="playic"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div><p>Суперлига. "Навбаҳор" – "Насаф" 1:0</p></article>
+      <article class="mcard"><div class="mcard-th th-b">🏆<span class="playic"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div><p>"Бавария" Германия Суперкубоги эгасига айланди</p></article>
+      <article class="mcard"><div class="mcard-th th-c">🎤<span class="playic"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div><p>Беҳруз Каримов билан катта интервью</p></article>
+    </div>
+
+    <div class="tabpane" id="pane-p">
+      <article class="mcard"><div class="mcard-th th-a">📸</div><p>"Навбаҳор" – "Насаф" учрашувидан галерея</p></article>
+      <article class="mcard"><div class="mcard-th th-e">📸</div><p>"Қўқон-1912" "Бунёдкор"ни мағлуб этган ўйиндан</p></article>
+      <article class="mcard"><div class="mcard-th th-b">📸</div><p>"Бухоро" пешқадам "Нефтчи"ни таслим қилган ўйин</p></article>
+      <article class="mcard"><div class="mcard-th th-d">📸</div><p>"Сўғдиёна" "Қизилқум"дан устун келган баҳс</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SOCIAL ===== -->
+<section class="social">
+  <div class="wrap">
+    <div class="soc-hd">
+      <h2>Бизни <span>ижтимоий тармоқларда</span> кузатинг</h2>
+      <p>Жонли натижалар, тезкор хабарлар ва эксклюзив таҳлиллар — сиз афзал кўрган платформада.</p>
+    </div>
+    <div class="socgrid">
+      <a class="soc" href="#" target="_blank" rel="noopener">
+        <span class="soc-ic i-tg"><svg viewBox="0 0 24 24"><path d="M9.8 15.6 9.6 19c.4 0 .5-.2.7-.4l1.7-1.6 3.5 2.6c.6.4 1.1.2 1.3-.6l2.4-11.2c.2-.9-.3-1.3-1-1L3.3 10.1c-.9.3-.9.8-.2 1l4.3 1.3 9.9-6.2c.5-.3.9-.1.5.2z"/></svg></span>
+        <b>Telegram</b><span>@maydon_uz</span><em>Асосий канал</em>
+      </a>
+      <a class="soc" href="#" target="_blank" rel="noopener">
+        <span class="soc-ic i-ig"><svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.3 2.2.4.6.2 1 .4 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.3 1.8-.4 2.2-.2.6-.4 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.3-2.2-.4-.6-.2-1-.4-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.3-1.8.4-2.2.2-.6.4-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4C8.4 2.2 8.8 2.2 12 2.2zm0 3.2A6.6 6.6 0 1 0 18.6 12 6.6 6.6 0 0 0 12 5.4zm0 10.9A4.3 4.3 0 1 1 16.3 12 4.3 4.3 0 0 1 12 16.3zm6.8-11.1a1.5 1.5 0 1 1-1.5-1.5 1.5 1.5 0 0 1 1.5 1.5z"/></svg></span>
+        <b>Instagram</b><span>@maydon.uz</span><em>Визуал контент</em>
+      </a>
+      <a class="soc" href="#" target="_blank" rel="noopener">
+        <span class="soc-ic i-yt"><svg viewBox="0 0 24 24"><path d="M23 7.5c-.3-1-1-1.8-2-2C19.1 5 12 5 12 5s-7.1 0-9 .5c-1 .2-1.8 1-2 2C.5 9.4.5 12 .5 12s0 2.6.5 4.5c.3 1 1 1.8 2 2C4.9 19 12 19 12 19s7.1 0 9-.5c1-.2 1.8-1 2-2 .5-1.9.5-4.5.5-4.5s0-2.6-.5-4.5zM9.7 15.4V8.6l6 3.4z"/></svg></span>
+        <b>YouTube</b><span>@MaydonUz</span><em>Видео таҳлил</em>
+      </a>
+      <a class="soc" href="#" target="_blank" rel="noopener">
+        <span class="soc-ic i-fb"><svg viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7A10 10 0 0 0 22 12z"/></svg></span>
+        <b>Facebook</b><span>/maydon.uz</span><em>Жамоатчилик</em>
+      </a>
+      <a class="soc" href="#" target="_blank" rel="noopener">
+        <span class="soc-ic i-x"><svg viewBox="0 0 24 24"><path d="M17.5 3h3l-6.6 7.5L21.8 21h-6l-4.7-6.2L5.7 21h-3l7-8L2.2 3h6.1l4.3 5.7zm-1 16h1.7L7.6 4.8H5.8z"/></svg></span>
+        <b>X (Twitter)</b><span>@maydon_uz</span><em>Тезкор хабар</em>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="wrap ft">
+    <div>
+      <div class="ft-b">MAY<b>DON</b></div>
+      <p>Ўзбекистон футбол портали · © 2026</p>
+    </div>
+    <div class="ft-l">
+      <a href="#">Биз ҳақимизда</a>
+      <a href="#">Таҳририят</a>
+      <a href="#">Сайтда реклама</a>
+      <a href="#">Махфийлик сиёсати</a>
+      <a href="#">Боғланиш</a>
+    </div>
+    <span class="age">18+</span>
+  </div>
+</footer>
+
+<!-- ===== ARTICLE MODAL ===== -->
+<div class="ov" id="ov" onclick="if(event.target===this)closeArt()">
+  <article class="art">
+    <button class="xbtn" onclick="closeArt()" aria-label="Ёпиш">×</button>
+    <span class="pill">Таҳлил · Суперлига</span>
+    <h2>Ҳакамлар кузни кутмади: Суперлигада бир ҳафтада учта қарор, учта жазо</h2>
+    <div class="art-meta">
+      <span class="who">MAYDON таҳририяти</span><span class="dot"></span>
+      <span>23 август, 2026</span><span class="dot"></span>
+      <span>5 дақиқалик ўқиш</span>
+    </div>
+
+    <p><b>Ўзбекистон Суперлигасида мавсумнинг иккинчи ярми ҳакамлик можаролари билан бошланди.</b> Бир ҳафта ичида чемпионатда ҳисобланмаган гол, ВАР ҳакамининг мавсум охиригача четлатилиши ва ЎзФҲМнинг кечиккан баёноти — учта воқеа кетма-кет юзага келди. Натижада мураббийлар, клублар ва мухлислар эътибори майдондаги ўйиндан кўра ҳакамлар қарорига қаратилди.</p>
+
+    <h3>Бошланиш нуқтаси: "Пахтакор" — "Сурхон"</h3>
+    <p>21 август куни Тошкентда "Пахтакор" ўз майдонида "Сурхон"ни қабул қилди ва учрашув ғалабасиз якунланди. Ўйиннинг ҳал қилувчи эпизоди — мезбонларнинг ҳисобга олинмаган голи бўлди. Ҳакамлар бригадаси голни оффсайд сабабли бекор қилди, бироқ бу қарор ўйиндан кейин кескин баҳс мавзусига айланди.</p>
+
+    <p>"Пахтакор" бош мураббийи Камолиддин Тожиев матбуот анжуманида фикрини яширмади:</p>
+    <div class="quote">"Қаердан оффсайд топишди билмайман. Оффсайд чизиғини дарвоза ортида чизса ҳам оффсайд йўқ эди."</div>
+
+    <h3>Кетма-кет келган интизомий чоралар</h3>
+    <p>Кейинги кунларда воқеалар тезлашди. Аввало, ЎзФҲМ — Ўзбекистон футбол ҳакамлари маркази — "Пахтакор" — "Сурхон" учрашувида ВАР тизимида ишлаган ҳакамни мавсум охирига қадар четлатди. Бу жорий мавсумдаги энг қаттиқ интизомий чоралардан бири бўлди.</p>
+
+    <p>Шундан сўнг марказ томонидан Равшан Абдувоҳидовга нисбатан ҳам жиддий жазо чораси қўлланилгани расман маълум қилинди. Ҳисобланмаган гол юзасидан эса ЎзФҲМ алоҳида баёнот билан чиқди — аммо баёнот учрашувдан бир неча кун ўтиб эълон қилингани ва саволларнинг барчасига жавоб бермагани яна танқидга сабаб бўлди.</p>
+
+    <h3>Тизимли муаммоми ёки тасодифми?</h3>
+    <p>Бир қарашда, жазолар тизим ишлаётганини кўрсатади: хато аниқланди, масъул жазоланди. Аммо асосий савол бошқа — нега хатолар мавсум ўртасида бирданига кўпайди?</p>
+
+    <p>ВАР технологияси Суперлигага айнан шундай баҳсларни камайтириш учун жорий этилган эди. Амалда эса ВАР ўзи низо манбаига айланиб бормоқда: қарор қабул қилиш вақти узаймоқда, тушунтириш эса етарли эмас. Клублар қарорнинг мантиғини эмас, фақат натижасини кўрмоқда.</p>
+
+    <p>Мавсум якунига яқинлашган, "Нефтчи" ва "Пахтакор" ўртасидаги фарқ бир неча очкони ташкил этаётган бир пайтда ҳар бир ҳисобланмаган гол чемпионлик тақдирига таъсир кўрсатиши мумкин. Шу боис ЎзФҲМ олдида турган вазифа фақат жазолаш эмас — қарорларни ўз вақтида ва тушунарли изоҳлаш ҳам зарур.</p>
+
+    <div class="srcs">
+      <h4>Манбалар</h4>
+      <a href="https://championat.asia/uz/news/paxtakor-surxon-uchrashuvida-varda-ishlagan-hakam-mavsum-oxiriga-qadar-chetlatildi" target="_blank" rel="noopener">Championat.asia — ВАР ҳакамининг четлатилиши</a>
+      <a href="https://championat.asia/uz/news/rasman-ozfhm-ravshan-abduvohidovni-jiddiy-jazoladi" target="_blank" rel="noopener">Championat.asia — ЎзФҲМ Равшан Абдувоҳидовни жазолади</a>
+      <a href="https://championat.asia/uz/news/ozfhm-paxtakorning-hisoblanmagan-goli-boyicha-bayonot-bilan-chiqdi-biroq" target="_blank" rel="noopener">Championat.asia — ЎзФҲМнинг ҳисобланмаган гол бўйича баёноти</a>
+      <a href="https://championat.asia/uz/news/kamoliddin-tojiev-qaerdan-offsayd-topishdi-bilmayman-offsayd-chizigini-darvoza-ortida-chizsa-ham-offsayd-yoq-edi" target="_blank" rel="noopener">Championat.asia — Камолиддин Тожиевнинг изоҳи</a>
+      <a href="https://championat.asia/uz/news/superliga-paxtakor-surxon-puraliganji-sherbotaev-va-bozorov-asosiyda-merganov-va-hamdamov-zaxirada" target="_blank" rel="noopener">Championat.asia — "Пахтакор" — "Сурхон" учрашуви ҳисоботи</a>
+    </div>
+  </article>
+</div>
+
+<script>
+// mobile nav
+var burger=document.getElementById('burger'),nav=document.getElementById('nav');
+burger.addEventListener('click',function(){nav.classList.toggle('open')});
+nav.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){nav.classList.remove('open')})});
+
+// language switch (visual only — real version needs a second set of pages)
+document.querySelectorAll('.langsw button').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.langsw button').forEach(function(x){x.classList.remove('on')});
+    b.classList.add('on');
+  });
+});
+
+// media tabs
+document.querySelectorAll('.tab').forEach(function(t){
+  t.addEventListener('click',function(){
+    document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});
+    document.querySelectorAll('.tabpane').forEach(function(p){p.classList.remove('on')});
+    t.classList.add('on');
+    document.getElementById('pane-'+t.dataset.t).classList.add('on');
+  });
+});
+
+// article modal
+var ov=document.getElementById('ov');
+function openArt(){ov.classList.add('on');document.body.style.overflow='hidden';ov.scrollTop=0}
+function closeArt(){ov.classList.remove('on');document.body.style.overflow=''}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeArt()});
+</script>
+</body>
+</html>
